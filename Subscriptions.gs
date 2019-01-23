@@ -16,6 +16,7 @@ function saveSubscriptions(e) {
   var monthly  = getMonthly();
   var yearly   = getYearly();
   var biweekly = getBiweekly();
+  
   var weekly   = {}; // change to getWeekly() and create WeeklySub tab if you want to exist
 
   saveToCategoriesSheet(consolidateCategoriesToMonthlySums(monthly, yearly, biweekly, weekly)); 
@@ -69,7 +70,7 @@ function saveToCategoriesSheet(categoriesToMonthlySum) {
   var categoryToRow = {};
   
   for (var row = startRow; row < endRow; row++) {
-    categoryToRow[data[i][categoryCol]] = i;
+    categoryToRow[data[row][categoryCol]] = row;
   }
   
   for (var category in categoriesToMonthlySum) {

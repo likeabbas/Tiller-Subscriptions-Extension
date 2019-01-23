@@ -68,8 +68,8 @@ function getByDays(sheetName, numDays) {
     
     var monthlySum = categoriesToMonthlySum[weeklyObject.category];
     
-    var startDate = new Date(new Date().getYear()  , 0, 0, 0, 0, 0, 0); // Jan 1 of current year 
-    var endDate   = new Date(startDate .getYear()+1, 0, 0, 0, 0, 0, 0); // Jan 1 of next year 
+    var startDate = new Date(new Date().getYear()  , 0, 1, 0, 0, 0, 0); // Jan 1 of current year 
+    var endDate   = new Date(startDate .getYear()+1, 0, 1, 0, 0, 0, 0); // Jan 1 of next year 
     
     if (weeklyObject.startDate instanceof Date) {
     
@@ -95,6 +95,8 @@ function getByDays(sheetName, numDays) {
       monthlySum[months[startDate.getMonth()]] += weeklyObject.amount;
       startDate.setDate(startDate.getDate() + numDays);
     } 
+    
+
   }
   
   return categoriesToMonthlySum;
