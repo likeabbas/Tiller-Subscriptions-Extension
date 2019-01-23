@@ -8,11 +8,12 @@
 
 var monthlySheet = "MonthlySub";
 
-function createMonthlyObject(amount, category, dayOfMonth, endDate) {
+function createMonthlyObject(amount, category, dayOfMonth, startDate, endDate) {
   return {
     amount:     amount,     // int
     category:   category,   // string
     dayOfMonth: dayOfMonth, // int
+    startDate:  startDate,
     endDate:    endDate     // Date Object
   };
 }
@@ -29,7 +30,8 @@ function getMonthly() {
   var amountCol      = 4;
   var accountCol     = 5;
   var autoPayCol     = 6;
-  var endDateCol     = 7;
+  var startDateCol   = 7;
+  var endDateCol     = 8;
     
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(monthlySheet);
   var data  = sheet.getDataRange().getValues();
@@ -40,7 +42,7 @@ function getMonthly() {
   var endRow   = data.length;
   
   for (var row = startRow; row < endRow; row++) {
-    monthlyObjects.push(createMonthlyObject(data[row][amountCol], data[row][categoryCol], data[row][dayOfMonthCol], data[row][endDateCol]));
+    monthlyObjects.push(createMonthlyObject(data[row][amountCol], data[row][categoryCol], data[row][dayOfMonthCol], data[row][startDateCol], data[row][endDateCol]));
   }
   
   for (var i = 0; i < monthlyObjects.length; i++) {
@@ -49,6 +51,12 @@ function getMonthly() {
     
     if (monthlyObject.category in categoriesToMonthlySum === false) {
       categoriesToMonthlySum[monthlyObject.category] = createMonthlySumObject();
+    }
+    
+    var startDate = new Date(new Date().getYear()  , 0, 1, 0, 0, 0, 0); // Jan 1 of current year 
+    
+    if (monthlyObject.startDate instanceof Date) {
+      startDate = monthlyObject.startDate;
     }
     
     var monthlySum = categoriesToMonthlySum[monthlyObject.category];
@@ -63,7 +71,7 @@ function getMonthly() {
       }      
     } 
     
-    for (var j = 0; j <= lastMonth; j++) {
+    for (var j = startDate.getMonth(); j <= lastMonth; j++) {
       var month = months[j];
       monthlySum[month] += monthlyObject.amount;
     }
