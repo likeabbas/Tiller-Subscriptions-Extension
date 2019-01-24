@@ -58,7 +58,6 @@ function getSubscriptions(timeline, sheetname) {
     var lastDayOfYear = new Date(new Date().getFullYear(), 11, 31); 
 
     var startDate = subscription.startDate;
-    Logger.log(subscription.endDate instanceof Date);
     var endDate   = (subscription.endDate instanceof Date) ? subscription.endDate : lastDayOfYear; 
 
     /* 
@@ -67,7 +66,8 @@ function getSubscriptions(timeline, sheetname) {
      */ 
     startDate.setHours(0,0,0,0);
     endDate  .setHours(0,0,0,0);
-    Logger.log(endDate);
+    
+    var ogDay = startDate.getDate();
 
     /* 
      *  Loop until startDate > endDate
@@ -88,7 +88,7 @@ function getSubscriptions(timeline, sheetname) {
       startDate.setFullYear(startDate.getYear () + timeline.years );
       
       for (var k = 0; k < timeline.months; k++) {
-        startDate = addMonth(startDate);
+        startDate = addMonth(startDate, ogDay);
       }
     }
   }
@@ -111,9 +111,9 @@ getDaysInMonth = function (year, month) {
  * Jan 30th -> Feb 28/29 -> March 31st
  * Should probably be March 30th but whatever
  */
-addMonth = function (date) {
+addMonth = function (date, ogDay) {
 
-    var day     = date.getDate ();
+    var day     = Math.min(date.getDate(), ogDay);
     var year    = date.getYear ();
     var month   = date.getMonth();
     var lastDay = getDaysInMonth(year, month);
@@ -138,4 +138,3 @@ addMonth = function (date) {
       return date;
     }
 };
-
