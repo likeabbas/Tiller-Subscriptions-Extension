@@ -1,23 +1,23 @@
 /**
  * @OnlyCurrentDoc
  *
- * Only request permissions for the currently running sheet
+ *  Only request permissions for the currently running sheet
  *
  *  https://developers.google.com/apps-script/guides/services/authorization#permissions_and_types_of_scripts
  */
  
 // Global sheet names so main.gs can pick up the sheets 
-var monthlySheet   = "MonthlySubTest";
-var biweeklySheet  = "BiweeklySubTest";
-var weeklySheet    = "WeeklySubTest";
-var yearlySheet    = "YearlySubTest";
+var monthlySheet  = "MonthlySubTest";
+var biweeklySheet = "BiweeklySubTest";
+var weeklySheet   = "WeeklySubTest";
+var yearlySheet   = "YearlySubTest";
  
 function saveSubscriptions() {
   
   var monthly   = getSubscriptions(getMonthlyTimeline (),  monthlySheet );
-  var biweekly  = getSubscriptions(getBiweeklyTimeline(),  biweeklySheet);
   var yearly    = getSubscriptions(getYearlyTimeline  (),  yearlySheet  );
   var weekly    = getSubscriptions(getWeeklyTimeline  (),  weeklySheet  );
+  var biweekly  = getSubscriptions(getBiweeklyTimeline(),  biweeklySheet);
   
   saveToCategoriesSheet(consolidateCategoriesToMonthlySums(monthly, yearly, biweekly, weekly));
 }
@@ -38,7 +38,7 @@ function getWeeklyTimeline() {
   return createTimeline(7, 0, 0);
 }
 
-/* 
+/**
  * Only one of the fields in `timeline` should be NonZero 
  */
 function createTimeline(days, months, years) {
@@ -51,9 +51,9 @@ function createTimeline(days, months, years) {
 
 function consolidateCategoriesToMonthlySums(monthly, yearly, biweekly, weekly) {
 
-  consolidate(monthly, yearly);
+  consolidate(monthly, yearly  );
   consolidate(monthly, biweekly);
-  consolidate(monthly, weekly);
+  consolidate(monthly, weekly  );
   
   return monthly;
 }
@@ -68,7 +68,7 @@ function consolidate(ob1, ob2) {
   for (var category in ob2) {
     if (category in ob1) {
     
-      for (var month = 0; month < months.length; month++) {
+      for (var month = 0; month < 12; month++) {
         ob1[category][month] += ob2[category][month];
       }
       
@@ -78,15 +78,11 @@ function consolidate(ob1, ob2) {
   }
 }
 
-var categoriesSheet = "Categories";
-
-var monthToNum = {
-  Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12
-};
-
 function saveToCategoriesSheet(categoriesToMonthlySum) { 
 
   Logger.log(categoriesToMonthlySum);
+
+  var categoriesSheet = "Categories";
 
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(categoriesSheet);
   var data  = sheet.getDataRange().getValues();
@@ -113,7 +109,7 @@ function saveToCategoriesSheet(categoriesToMonthlySum) {
        // row and col were off by 1 so added 1 to each 
        var row = categoryToRow[category] + 1;
        
-       for (var month = 0; month < months.length; month++) {
+       for (var month = 0; month < 12; month++) {
          
          // get the number of the month, plus the offset from where the month lives in the Categories sheet column, plus offset of 1 
          var col = month + janCol + 1;
@@ -123,16 +119,3 @@ function saveToCategoriesSheet(categoriesToMonthlySum) {
     }
   }
 }
-
-// Helpers
-
-
-
-function createMonthlySumObject() {
-  return {
-    Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0, Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0
-  };
-}
-
-
-

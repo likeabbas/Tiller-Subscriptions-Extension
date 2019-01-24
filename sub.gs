@@ -86,8 +86,8 @@ function getSubscriptions(timeline, sheetname) {
         monthlySum[startDate.getMonth()] += subscription.amount;
       }
     
-      startDate.setDate    (startDate.getDate () + timeline.days  );
-      startDate.setFullYear(startDate.getYear () + timeline.years );
+      startDate.setDate    (startDate.getDate() + timeline.days );
+      startDate.setFullYear(startDate.getYear() + timeline.years);
       
       for (var k = 0; k < timeline.months; k++) {
         startDate = addMonth(startDate, ogDay);
@@ -124,7 +124,7 @@ addMonth = function (date, ogDay) {
     
     var nextLastDay = getDaysInMonth(nextYear, nextMonth);
     
-    if (day == lastDay || day >= nextLastDay){
+    if (day == lastDay || day >= nextLastDay) {
     
       if (ogDay < nextLastDay) nextLastDay = ogDay;
       
