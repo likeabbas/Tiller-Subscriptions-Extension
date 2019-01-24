@@ -96,7 +96,7 @@ function saveToCategoriesSheet(categoriesToMonthlySum) {
   var data  = sheet.getDataRange().getValues();
   
   var categoryCol = 0;
-  var janCol      = 6;
+  var janCol      = 7;
   
   var startRow  = 2;
   var endRow    = data.length;
