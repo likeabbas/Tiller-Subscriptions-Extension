@@ -22,13 +22,13 @@ function getSubscriptions(timeline, sheetname) {
    */
   var categoriesToMonthlySum = {}; 
 
-  var descriptionCol = 0;
-  var categoryCol    = 1;
-  var subCatCol      = 2;
-  var amountCol      = 3;
-  var startDateCol   = 4;
+  var descriptionCol = 0; // required
+  var categoryCol    = 1; // required to match one category on Categories sheet
+  var subCatCol      = 2; 
+  var amountCol      = 3; // required
+  var startDateCol   = 4; // required
   var endDateCol     = 5;
-  var accountCol     = 6;
+  var accountCol     = 6; // required
   var autoPayCol     = 7;
     
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetname);
@@ -52,7 +52,7 @@ function getSubscriptions(timeline, sheetname) {
       categoriesToMonthlySum[subscription.category] = createMonthlySum();
     }
     
-    var monthlySum    = categoriesToMonthlySum[subscription.category]; 
+    var monthlySum  = categoriesToMonthlySum[subscription.category]; 
     
     // December 31 of current year 
     var lastDayOfYear = new Date(new Date().getFullYear(), 11, 31); 
@@ -67,7 +67,7 @@ function getSubscriptions(timeline, sheetname) {
     startDate.setHours(0,0,0,0);
     endDate  .setHours(0,0,0,0);
     
-    var ogDay = startDate.getDate();
+    var ogDay = startDate.getDate(); // Originally day of month
 
     /* 
      *  Loop until startDate > endDate
@@ -107,6 +107,13 @@ getDaysInMonth = function (year, month) {
     return [31, (isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 };
 
+
+/*
+ *   ogDay is the original day of the month from startDate grabbed in the sheet
+ *   if ogDay > next month's end of month, return last day of next month
+ *   else, use ogDay
+ *   could probably clean up this code a little bit. 
+ */
 addMonth = function (date, ogDay) {
 
     var day     = Math.min(date.getDate(), ogDay);
