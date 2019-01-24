@@ -107,12 +107,6 @@ getDaysInMonth = function (year, month) {
     return [31, (isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 };
 
-
-/* 
- * Edge Case:
- * Jan 30th -> Feb 28/29 -> March 31st
- * Should probably be March 30th but whatever
- */
 addMonth = function (date, ogDay) {
 
     var day     = Math.min(date.getDate(), ogDay);

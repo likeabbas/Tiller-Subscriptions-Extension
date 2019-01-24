@@ -6,25 +6,20 @@
  *  https://developers.google.com/apps-script/guides/services/authorization#permissions_and_types_of_scripts
  */
  
-// Would be nice to force the "Category" column in each of the Sub sheets to do the same thing as in Autocat, 
-// where the category has to match something in the Categories tab
- 
-// Global Helpers at the bottom of this file 
+// Global sheet names so main.gs can pick up the sheets 
+var monthlySheet   = "MonthlySubTest";
+var biweeklySheet  = "BiweeklySubTest";
+var weeklySheet    = "WeeklySubTest";
+var yearlySheet    = "YearlySubTest";
  
 function saveSubscriptions() {
-
-  var monthlySheet   = "MonthlySubTest";
-  var biweeklySheet  = "BiweeklySubTest";
-  var weeklySheet    = "WeeklySubTest";
-  var yearlySheet    = "YearlySubTest";
   
-  var monthly   = getSubscriptions(getMonthlyTimeline (),  monthlySheet);
-  var biweekly  = getSubscriptions(getBiweeklyTimeline(),  biweeklySheet );
-  var yearly    = getSubscriptions(getYearlyTimeline  (),  yearlySheet );
-  var weekly    = getSubscriptions(getWeeklyTimeline(),    weeklySheet );
+  var monthly   = getSubscriptions(getMonthlyTimeline (),  monthlySheet );
+  var biweekly  = getSubscriptions(getBiweeklyTimeline(),  biweeklySheet);
+  var yearly    = getSubscriptions(getYearlyTimeline  (),  yearlySheet  );
+  var weekly    = getSubscriptions(getWeeklyTimeline  (),  weeklySheet  );
   
-  saveToCategoriesSheet(consolidateCategoriesToMonthlySums(monthly, biweekly, yearly, weekly));
-  
+  saveToCategoriesSheet(consolidateCategoriesToMonthlySums(monthly, yearly, biweekly, weekly));
 }
 
 function getYearlyTimeline() {
@@ -54,8 +49,6 @@ function createTimeline(days, months, years) {
   };
 }
 
-
-
 function consolidateCategoriesToMonthlySums(monthly, yearly, biweekly, weekly) {
 
   consolidate(monthly, yearly);
@@ -67,12 +60,15 @@ function consolidateCategoriesToMonthlySums(monthly, yearly, biweekly, weekly) {
 
 function consolidate(ob1, ob2) {
 
+  /* 
+   * Loop through every category in ob2
+   * if that category exists in ob1, combine the sum for that month
+   * else, set category in ob1 to value in ob2
+   */
   for (var category in ob2) {
-  
     if (category in ob1) {
     
       for (var month = 0; month < months.length; month++) {
-        
         ob1[category][month] += ob2[category][month];
       }
       
@@ -96,16 +92,18 @@ function saveToCategoriesSheet(categoriesToMonthlySum) {
   var data  = sheet.getDataRange().getValues();
   
   var categoryCol = 0;
-  var janCol      = 7;
+  var janCol      = 7; // Jan column on Categories sheet 
   
-  var startRow  = 2;
-  var endRow    = data.length;
+  var startRow = 2;
+  var endRow   = data.length;
   
   var categoryToRow = {};
   
+  // Loop through category sheet, putting category -> row in a map
   for (var row = startRow; row < endRow; row++) {
     categoryToRow[data[row][categoryCol]] = row;
   }
+  
   
   for (var category in categoriesToMonthlySum) {
   
@@ -128,14 +126,13 @@ function saveToCategoriesSheet(categoriesToMonthlySum) {
 
 // Helpers
 
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 
 function createMonthlySumObject() {
   return {
     Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0, Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0
   };
 }
-
 
 
 
