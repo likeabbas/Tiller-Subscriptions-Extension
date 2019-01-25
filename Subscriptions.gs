@@ -7,10 +7,10 @@
  */
  
 // Global sheet names so main.gs can pick up the sheets 
-var monthlySheet  = "MonthlySubTest";
-var biweeklySheet = "BiweeklySubTest";
-var weeklySheet   = "WeeklySubTest";
-var yearlySheet   = "YearlySubTest";
+var monthlySheet  = "Monthly Subscriptions";
+var biweeklySheet = "Biweekly Subscriptions";
+var weeklySheet   = "Weekly Subscriptions";
+var yearlySheet   = "Yearly Subscriptions";
  
 function saveSubscriptions() {
   

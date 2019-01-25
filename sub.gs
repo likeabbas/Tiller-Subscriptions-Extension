@@ -23,7 +23,7 @@ function getSubscriptions(timeline, sheetname) {
   var categoriesToMonthlySum = {}; 
 
   var descriptionCol = 0; // required
-  var categoryCol    = 1; // required to match one category on Categories sheet
+  var categoryCol    = 1; // required, and category has to match one listen on the Categories sheet
   var subCatCol      = 2; 
   var amountCol      = 3; // required
   var startDateCol   = 4; // required
