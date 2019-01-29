@@ -100,11 +100,11 @@ function getSubscriptions(timeline, sheetname) {
 }
 
 isLeapYear = function (year) { 
-    return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)); 
+  return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)); 
 };
 
 getDaysInMonth = function (year, month) {
-    return [31, (isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+  return [31, (isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 };
 
 
@@ -116,30 +116,20 @@ getDaysInMonth = function (year, month) {
  */
 addMonth = function (date, ogDay) {
 
-    var day     = Math.min(date.getDate(), ogDay);
-    var year    = date.getYear ();
-    var month   = date.getMonth();
-    var lastDay = getDaysInMonth(year, month);
-    
-    var nextMonth = month + 1;
-    var nextYear  = year;
+    var nextMonth = date.getMonth() + 1;
+    var nextYear  = date.getYear ();
+    var nextDay   = ogDay;
     
     if (nextMonth > 11) {
       nextYear++;
       nextMonth = 0;
     }
+
+    var lastDayOfNextMonth = getDaysInMonth(nextYear, nextMonth)
     
-    var nextLastDay = getDaysInMonth(nextYear, nextMonth);
-    
-    if (day == lastDay || day >= nextLastDay) {
-    
-      if (ogDay < nextLastDay) nextLastDay = ogDay;
-      
-      return new Date(nextYear, nextMonth, nextLastDay, 0, 0, 0);
-      
-    } else {
-    
-      date.setMonth(date.getMonth() + 1);
-      return date;
-    }
+    if (nextDay > nextLastDay) {
+      nextDay = nextLastDay;
+    } 
+
+    return new Date(nextYear, nextMonth, nextDay, 0, 0, 0);
 };
