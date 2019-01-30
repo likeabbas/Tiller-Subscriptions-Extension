@@ -39,7 +39,17 @@ function getSubscriptions(timeline, sheetname) {
   var subscriptions = [] // list of subscription objects
   
   for (var row = startRow; row < endRow; row++) {
-    subscriptions.push(createSubscription(data[row][categoryCol], data[row][amountCol], data[row][startDateCol], data[row][endDateCol]));
+
+    var category  = data[row][categoryCol ];
+    var amount    = data[row][amountCol   ];
+    var startDate = data[row][startDateCol];
+    var endDate   = data[row][endDateCol  ];
+
+    if (!(category instanceof String) || category == "" || !(amount instanceof Number) || !(startDate instanceof Date)) {
+      continue;
+    }
+
+    subscriptions.push(createSubscription(category, amount, startDate, endDate));
   }
   
   Logger.log(subscriptions);
