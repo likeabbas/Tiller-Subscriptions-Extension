@@ -45,7 +45,7 @@ function getSubscriptions(timeline, sheetname) {
     var startDate = data[row][startDateCol];
     var endDate   = data[row][endDateCol  ];
 
-    if (!(category instanceof String) || category == "" || !(amount instanceof Number) || !(startDate instanceof Date)) {
+    if (!(typeof category == "string") || category == "" || !(typeof amount == "number") || !(startDate instanceof Date)) {
       continue;
     }
 
@@ -137,8 +137,8 @@ addMonth = function (date, ogDay) {
 
     var lastDayOfNextMonth = getDaysInMonth(nextYear, nextMonth)
     
-    if (nextDay > nextLastDay) {
-      nextDay = nextLastDay;
+    if (nextDay > lastDayOfNextMonth) {
+      nextDay = lastDayOfNextMonth;
     } 
 
     return new Date(nextYear, nextMonth, nextDay, 0, 0, 0);
